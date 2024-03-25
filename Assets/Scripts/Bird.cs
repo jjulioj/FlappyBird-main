@@ -6,26 +6,23 @@ public class Bird : MonoBehaviour
 {
     public Rigidbody2D rig;
     public float jumpForce;
-    public BirdStatus status = BirdStatus.Start;
 
-    // Start is called before the first frame update
     void Start()
     {
         rig.bodyType = RigidbodyType2D.Static;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        switch (status)
+        switch (GameManager.instance.status)
         {
-            case BirdStatus.Start:
+            case GameStatus.Start:
                 StartUpdate();
                 break;
-            case BirdStatus.Play:
+            case GameStatus.Play:
                 PlayUpdate();
                 break;
-            case BirdStatus.GameOver:
+            case GameStatus.GameOver:
                 GameOverUpdate();
                 break;
         }
@@ -35,7 +32,8 @@ public class Bird : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            status = BirdStatus.Play;
+            //GameManager.instance.status = GameStatus.Play;
+            GameManager.instance.StartGame();
             rig.bodyType = RigidbodyType2D.Dynamic;
             Jump();
         }
@@ -61,12 +59,7 @@ public class Bird : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        status = BirdStatus.GameOver;
+        GameManager.instance.GameOver();
     }
 }
 
-public enum BirdStatus {
-    Start,
-    Play,
-    GameOver
-}
